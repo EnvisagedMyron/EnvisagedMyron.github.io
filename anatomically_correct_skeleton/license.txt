@@ -1,0 +1,11 @@
+Model Information:
+* title:	Anatomically Correct Skeleton
+* source:	https://sketchfab.com/3d-models/anatomically-correct-skeleton-3247ca2f8a6346d78142f193eeb59c88
+* author:	xandizandi (https://sketchfab.com/xandizandi)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Anatomically Correct Skeleton" (https://sketchfab.com/3d-models/anatomically-correct-skeleton-3247ca2f8a6346d78142f193eeb59c88) by xandizandi (https://sketchfab.com/xandizandi) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
