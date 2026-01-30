@@ -5,22 +5,25 @@ const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.z = 3;
 
-// FIX: Explicitly set alpha and clearAlpha to ensure the background image shows
+// Renderer with transparency fixed
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 renderer.setClearColor(0x000000, 0); 
 renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setPixelRatio(window.devicePixelRatio);
 document.body.appendChild(renderer.domElement);
 
-// Lighting
-scene.add(new THREE.AmbientLight(0xffffff, 0.5));
-const sunLight = new THREE.DirectionalLight(0xffffff, 1.5);
-sunLight.position.set(0, 10, 0); 
-scene.add(sunLight);
+// --- Lighting Fix ---
+const ambientLight = new THREE.AmbientLight(0xffffff, 1.2); // Boosted intensity
+scene.add(ambientLight);
+
+const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
+directionalLight.position.set(5, 5, 5);
+scene.add(directionalLight);
 
 const modelGroup = new THREE.Group();
 scene.add(modelGroup);
 
+// Model Loading
 const loader = new GLTFLoader();
 loader.load('https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/381a69f58bb395a082d79d4fb746717ae6b64307/anatomy-compressed.glb', (gltf) => {
     const model = gltf.scene;
@@ -59,11 +62,9 @@ window.addEventListener('mouseup', () => {
 
 window.addEventListener('mousemove', (e) => {
     if (activeSlider) {
-        // Limits: X24 to X140 relative to screen (32 offset)
         let relativeX = e.clientX - 32;
         if (relativeX < -8) relativeX = -8;
         if (relativeX > 108) relativeX = 108;
-        
         activeSlider.style.left = relativeX + 'px';
 
         const logo = document.getElementById(activeSlider.dataset.logo);
@@ -86,6 +87,12 @@ window.addEventListener('mousemove', (e) => {
         prevMouse = { x: e.clientX, y: e.clientY };
     }
 });
+
+// --- Scroll Zoom Fix ---
+window.addEventListener('wheel', (e) => {
+    // Zoom sensitivity
+    modelGroup.position.z -= e.deltaY * 0.001;
+}, { passive: true });
 
 function animate() {
     requestAnimationFrame(animate);
