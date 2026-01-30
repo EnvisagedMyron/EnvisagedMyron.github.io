@@ -12,19 +12,24 @@ renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.0; 
 document.body.appendChild(renderer.domElement);
 
-// --- The "Sky Light" System ---
+// --- The Final Lighting System ---
 
-// 1. Hemisphere Light: Provides the "Global" sky feel (Top: White, Bottom: Dark Gray)
-const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 1.2);
+// 1. Ambient Light (Your Request): Softly fills every corner of the model
+// Setting this to a lower intensity (0.4) keeps it from looking "flat"
+const generalAmbient = new THREE.AmbientLight(0xffffff, 0.4);
+scene.add(generalAmbient);
+
+// 2. Hemisphere Light: Natural sky-to-ground gradient
+const hemiLight = new THREE.HemisphereLight(0xffffff, 0x222222, 1.0);
 scene.add(hemiLight);
 
-// 2. Main Directional Light: Acts like the sun, hitting everything from above
-const sunLight = new THREE.DirectionalLight(0xffffff, 2.0);
-sunLight.position.set(0, 10, 0); // Positioned high above
+// 3. Sun/Sky Light: Powerful parallel light from above
+const sunLight = new THREE.DirectionalLight(0xffffff, 1.5);
+sunLight.position.set(0, 10, 0); 
 scene.add(sunLight);
 
-// 3. Fill Light: Stays in front of the model so the "face" is never in shadow
-const fillLight = new THREE.DirectionalLight(0xffffff, 0.8);
+// 4. Fill Light: Stays in front to ensure the details facing the camera are clear
+const fillLight = new THREE.DirectionalLight(0xffffff, 0.6);
 fillLight.position.set(0, 0, 5); 
 scene.add(fillLight);
 
@@ -59,11 +64,14 @@ window.addEventListener('mousemove', (e) => {
     const deltaY = e.clientY - previousMousePosition.y;
 
     if (e.shiftKey) {
+        // Panning (Move model)
         modelGroup.position.x += deltaX * 0.005;
         modelGroup.position.y -= deltaY * 0.005;
     } else {
+        // Rotation (Rotate model)
         modelGroup.rotation.y += deltaX * 0.01;
         const nextRotationX = modelGroup.rotation.x + deltaY * 0.01;
+        // Keep from flipping upside down
         if (nextRotationX > -Math.PI / 2 && nextRotationX < Math.PI / 2) {
             modelGroup.rotation.x = nextRotationX;
         }
@@ -78,8 +86,7 @@ window.addEventListener('wheel', (e) => {
 function animate() {
     requestAnimationFrame(animate);
     
-    // Make the lights "follow" the model's X/Z position so it's always under the "sky"
-    // but keep them high up so the light rays stay parallel
+    // Keep the "Sun" over the model as you pan
     sunLight.position.x = modelGroup.position.x;
     sunLight.position.z = modelGroup.position.z;
     sunLight.target = modelGroup;
