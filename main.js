@@ -3,7 +3,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.z = 2;
+camera.position.z = 5; // Start a bit further back
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 renderer.setClearColor(0x000000, 0);
@@ -11,14 +11,12 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 document.body.appendChild(renderer.domElement);
 
-// --- "Headlamp" Lighting ---
-// This light stays with the camera, so it always shines on what you see.
-const headlamp = new THREE.PointLight(0xffffff, 5);
+// --- Headlamp Lighting ---
+const headlamp = new THREE.PointLight(0xffffff, 50); // Increased intensity for distance
 camera.add(headlamp); 
 scene.add(camera); 
 
-// Subtle fill light so the edges aren't too harsh
-const fillLight = new THREE.HemisphereLight(0xffffff, 0x000000, 0.5);
+const fillLight = new THREE.AmbientLight(0xffffff, 0.3);
 scene.add(fillLight);
 
 let model;
@@ -33,15 +31,20 @@ loader.load(modelUrl, (gltf) => {
     scene.add(model);
 });
 
-// --- Custom Interaction Logic ---
+// --- Interaction State ---
 let isDragging = false;
 let previousMousePosition = { x: 0, y: 0 };
 
+// 1. Mouse Down/Up
 window.addEventListener('mousedown', () => isDragging = true);
 window.addEventListener('mouseup', () => isDragging = false);
 
+// 2. Rotation and Panning
 window.addEventListener('mousemove', (e) => {
-    if (!isDragging || !model) return;
+    if (!isDragging || !model) {
+        previousMousePosition = { x: e.offsetX, y: e.offsetY };
+        return;
+    }
 
     const deltaMove = {
         x: e.offsetX - previousMousePosition.x,
@@ -53,13 +56,26 @@ window.addEventListener('mousemove', (e) => {
         model.position.x += deltaMove.x * 0.005;
         model.position.y -= deltaMove.y * 0.005;
     } else {
-        // Left Click + Drag: Rotate the model
+        // Left Click + Drag: Rotate
         model.rotation.y += deltaMove.x * 0.01;
-        model.rotation.x += deltaMove.y * 0.01;
+        
+        // Clamp vertical rotation to prevent flipping upside down
+        const newRotationX = model.rotation.x + deltaMove.y * 0.01;
+        if (newRotationX > -Math.PI / 2 && newRotationX < Math.PI / 2) {
+            model.rotation.x = newRotationX;
+        }
     }
 
     previousMousePosition = { x: e.offsetX, y: e.offsetY };
 });
+
+// 3. Zoom (Scroll)
+window.addEventListener('wheel', (e) => {
+    if (!model) return;
+    // Move model closer or further on Z axis
+    // e.deltaY is positive when scrolling down, negative when up
+    model.position.z -= e.deltaY * 0.005;
+}, { passive: true });
 
 function animate() {
     requestAnimationFrame(animate);
