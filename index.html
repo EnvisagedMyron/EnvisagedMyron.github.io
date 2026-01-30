@@ -1,48 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Anatomy Viewer</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="ui-container">
-        <div class="frame-1-1">
-            <h1 class="text-15">ANATOMY</h1>
-            
-            <div class="search_bar-18">
-                <div class="search_background-6">
-                    <span class="text-14">Search...</span>
-                </div>
-            </div>
-
-            <div class="menu-items">
-                <div class="item">
-                    <div class="scroll_bar_muscle-10"></div>
-                    <span class="text-17">Muscular System</span>
-                </div>
-                <div class="item">
-                    <div class="scroll_bar_bone-21"></div>
-                    <span class="text-17">Skeletal System</span>
-                </div>
+<div id="ui-container">
+    <div class="filter-panel">
+        <h3 class="panel-title">Layers</h3>
+        
+        <div class="control-item">
+            <img src="https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/scroll_tab/bone_logo.png" class="icon" alt="Bones">
+            <div class="slider-track scroll-bar-bone">
+                <input type="range" min="0" max="1" step="0.01" value="1" class="slider" id="bone-slider">
             </div>
         </div>
 
-        <div class="settings_background-8">
-            <div class="text-19">⚙️</div>
+        <div class="control-item">
+            <img src="https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/scroll_tab/ligament_logo.png" class="icon" alt="Ligaments">
+            <div class="slider-track scroll-bar-ligament">
+                <input type="range" min="0" max="1" step="0.01" value="1" class="slider" id="ligament-slider">
+            </div>
+        </div>
+
+        <div class="control-item">
+            <img src="https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/scroll_tab/muscle_logo.png" class="icon" alt="Muscles">
+            <div class="slider-track scroll-bar-muscle">
+                <input type="range" min="0" max="1" step="0.01" value="1" class="slider" id="muscle-slider">
+            </div>
         </div>
     </div>
-
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
-            }
-        }
-    </script>
-    <script type="module" src="main.js"></script>
-</body>
-</html>
+</div>
