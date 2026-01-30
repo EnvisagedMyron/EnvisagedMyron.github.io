@@ -11,15 +11,17 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 document.body.appendChild(renderer.domElement);
 
-// 1. Create the Top Light (Outside the model group)
-const topLight = new THREE.SpotLight(0xffffff, 20);
-topLight.angle = Math.PI / 4;
-topLight.penumbra = 0.5;
+// --- Wide Top Light Setup ---
+const topLight = new THREE.SpotLight(0xffffff, 40);
+topLight.angle = Math.PI / 3; // Wider angle (approx 60 degrees)
+topLight.penumbra = 0.3;      // Soft edges, but maintains a circular shape
+topLight.decay = 1;           // How fast the light dims with distance
+topLight.distance = 10;       // Max range of the light
 scene.add(topLight);
 
-// 2. Create a Fill Light (So the bottom isn't pitch black)
-const fillLight = new THREE.DirectionalLight(0xffffff, 1.0);
-scene.add(fillLight);
+// Subtle ambient light so shadows aren't 100% black
+const ambient = new THREE.AmbientLight(0xffffff, 0.5);
+scene.add(ambient);
 
 const modelGroup = new THREE.Group();
 scene.add(modelGroup);
@@ -40,7 +42,7 @@ loader.load(modelUrl, (gltf) => {
     modelGroup.add(model);
 });
 
-// --- Interaction Logic ---
+// --- Interaction Logic (Same as before) ---
 let isDragging = false;
 let previousMousePosition = { x: 0, y: 0 };
 
@@ -72,27 +74,19 @@ window.addEventListener('wheel', (e) => {
     modelGroup.position.z -= e.deltaY * 0.002;
 }, { passive: true });
 
-// --- The Animation Loop (Light Follower) ---
+// --- Animation Loop ---
 function animate() {
     requestAnimationFrame(animate);
 
     if (model) {
-        // Position the light exactly above the modelGroup's current position
+        // Move the light higher above the model to broaden the circle's diameter
         topLight.position.set(
             modelGroup.position.x, 
-            modelGroup.position.y + (modelHeight / 2) + 1, 
+            modelGroup.position.y + modelHeight + 1.5, 
             modelGroup.position.z
         );
         
-        // Make the light shine directly at the center of the model
         topLight.target = modelGroup;
-
-        // Make the fill light follow the camera's view but stay with the model
-        fillLight.position.set(
-            modelGroup.position.x,
-            modelGroup.position.y,
-            modelGroup.position.z + 2
-        );
     }
 
     renderer.render(scene, camera);
