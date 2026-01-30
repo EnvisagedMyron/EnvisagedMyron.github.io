@@ -1,16 +1,78 @@
-body { 
-    margin: 0; 
-    background-image: url('https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/background.png');
-    background-size: cover;
-    background-position: center;
-    height: 100vh;
-    overflow: hidden;
+#ui-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10; /* Ensures UI stays above the 3D canvas */
+    pointer-events: none; /* Allows clicking through the container to the 3D model */
 }
 
-canvas {
-    display: block;
+.filter-panel {
+    pointer-events: auto; /* Re-enables clicking for the buttons themselves */
+    width: 119px;
+    height: 340px;
+    padding: 20px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    
+    /* From your Figma filterbackground data */
+    background-color: #181D25;
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0nMTE5JyBoZWlnaHQ9JzM0MCcgdmlld0JveD0nMCAwIDExOSAzNDAnIGZpbGw9J25vbmUnIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zyc+CjxwYXRoIGQ9J00zMyAxLjVIODZDMTAzLjM5NyAxLjUgMTE3LjUgMTUuNjAzIDExNy41IDMzVjMwN0MxMTcuNSAzMjQuMzk3IDEwMy4zOTcgMzM4LjUgODYgMzM4LjVIMzNDMTUuNjAzIDMzOC41IDEuNSAzMjQuMzk3IDEuNSAzMDdWMzNDMS41IDE1LjYwMyAxNS42MDMgMS41IDMzIDEuNVpNNCAyMTguNUMyLjYxOTI5IDIxOC41IDEuNSAyMTkuNjE5IDEuNSAyMjFDMS41IDIyMi4zODEgMi42MTkyOSAyMjMuNSA0IDIyMy41SDExNUMxMTYuMzgxIDIyMy41IDExNy41IDIyMi4zODEgMTE3LjUgMjIxQzExNy41IDIxOS42MTkgMTE2LjM4MSAyMTguNSAxMTUgMjE4LjVINFpNNCAxMTIuNUMyLjYxOTI5IDExMi41IDEuNSAxMTMuNjE5IDEuNSAxMTVDMS41IDExNi4zODEgMi42MTkyOSAxMTcuNSA0IDExNy41SDExNUMxMTYuMzgxIDExNy41IDExNy41IDExNi4zODEgMTE3LjUgMTE1QzExNy41IDExMy42MTkgMTE2LjM4MSAxMTIuNSAxMTUgMTEyLjVINFonIGZpbGw9JyMxODFEMjUnIHN0cm9rZT0ndXJsKCNwYWludDBfbGluZWFyXzg1OV82NiknIHN0cm9rZS13aWR0aD0nMycvPgo8ZGVmcz4KPGxpbmVhckdyYWRpZW50IGlkPSdwYWludDBfbGluZWFyXzg1OV82NicgeDE9JzU5LjUnIHkxPScwJyB4Mj0nNTkuNScgeTI9JzM0MCcgZ3JhZGllbnRVbml0cz0ndXNlclNwYWNlT25Vc2UnPgo8c3RvcCBzdG9wLWNvbG9yPScjNjE3NTlFJyBzdG9wLW9wYWNpdHk9JzAuMScvPgo8c3RvcCBvZmZzZXQ9JzEnIHN0b3AtY29sb3I9JyM3MDg2QjcnLz4KPC9saW5lYXJHcmFkaWVudD4KPC9kZWZzPgo8L3N2Zz4=");
+    background-repeat: no-repeat;
+    border-radius: 33px;
+}
+
+.panel-title {
+    color: #7086B7;
+    font-family: sans-serif;
+    font-size: 12px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.control-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.icon {
+    width: 40px; /* Scaled down from the 66px source for the menu size */
+    height: auto;
+}
+
+/* Scroll Bar Styles from your Figma scroll_bar data */
+.slider-track {
+    width: 21px;
+    height: 80px;
+    border-radius: 41px;
+    border: 2px solid #61759E;
+    position: relative;
+    overflow: hidden;
+    background: rgba(0,0,0,0.3);
+}
+
+.slider {
+    appearance: none;
+    width: 80px; /* Height of track */
+    height: 21px; /* Width of track */
+    background: transparent;
+    transform: rotate(-90deg);
     position: absolute;
-    top: 0;
-    left: 0;
-    outline: none; /* Removes the blue border on click */
+    top: 30px; 
+    left: -30px;
+    cursor: pointer;
+}
+
+/* Customizing the slider handle */
+.slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    background: #7086B7;
+    border-radius: 50%;
+    border: 1px solid white;
 }
