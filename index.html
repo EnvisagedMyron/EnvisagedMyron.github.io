@@ -1,85 +1,63 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Anatomy</title>
-    <style>
-        body { 
-            margin: 0; 
-            background-image: url('https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/background.png');
-            background-size: cover;
-            background-position: center;
-            height: 100vh;
-            overflow: hidden;
-        }
+<style>
+    /* ... existing body and canvas styles ... */
 
-        canvas {
-            display: block;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
+    #ui-layer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        pointer-events: none;
+        user-select: none;
+    }
 
-        /* UI Styling */
-        #ui-layer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none; /* Allows 3D interaction behind the UI */
-            user-select: none;
-        }
+    .ui-element {
+        position: absolute;
+        pointer-events: auto;
+    }
 
-        .ui-element {
-            position: absolute;
-            pointer-events: auto; /* Buttons/Sliders catch clicks */
-        }
+    /* Fixed Scaling as requested */
+    .filter-bg {
+        width: 60px;
+        height: 170px;
+    }
 
-        .logo { transition: opacity 0.1s ease; }
+    .logo {
+        width: 33px;
+        height: 34px;
+        transition: opacity 0.1s ease;
+    }
 
-        .scroll-bar {
-            cursor: pointer;
-            transform: translate(0, -50%); /* Center vertically on the Y coordinate */
-        }
-    </style>
-</head>
-<body>
-    <div id="ui-layer">
-        <img src="https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/scroll_tab/filter_button_background.png" 
-             class="ui-element" style="left: 32px; top: 124px;">
+    .scroll-bar {
+        width: 10px;
+        height: 44px;
+        cursor: ew-resize; /* Horizontal resize cursor */
+        transform: translateY(-50%); /* Vertical centering on the Y coordinate */
+    }
+</style>
 
-        <img id="bone-logo" src="https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/scroll_tab/bone_logo.png" 
-             class="ui-element logo" style="left: 59px; top: 147px;">
-        
-        <img id="ligament-logo" src="https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/scroll_tab/ligament_logo.png" 
-             class="ui-element logo" style="left: 62px; top: 256px;">
-        
-        <img id="muscle-logo" src="https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/scroll_tab/muscle_logo.png" 
-             class="ui-element logo" style="left: 65px; top: 368px;">
+<div id="ui-layer">
+    <img src="https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/scroll_tab/filter_button_background.png" 
+         class="ui-element filter-bg" style="left: 32px; top: 124px;">
 
-        <img id="scroll-bone" data-logo="bone-logo" class="ui-element scroll-bar"
-             src="https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/scroll_tab/scroll_bar.png" 
-             style="left: 140px; top: 141px;">
+    <img id="bone-logo" src="https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/scroll_tab/bone_logo.png" 
+         class="ui-element logo" style="left: 59px; top: 147px;">
+    
+    <img id="ligament-logo" src="https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/scroll_tab/ligament_logo.png" 
+         class="ui-element logo" style="left: 62px; top: 256px;">
+    
+    <img id="muscle-logo" src="https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/scroll_tab/muscle_logo.png" 
+         class="ui-element logo" style="left: 65px; top: 368px;">
 
-        <img id="scroll-ligament" data-logo="ligament-logo" class="ui-element scroll-bar"
-             src="https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/scroll_tab/scroll_bar.png" 
-             style="left: 140px; top: 248px;">
+    <img id="scroll-bone" data-logo="bone-logo" class="ui-element scroll-bar"
+         src="https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/scroll_tab/scroll_bar.png" 
+         style="left: 140px; top: 141px;">
 
-        <img id="scroll-muscle" data-logo="muscle-logo" class="ui-element scroll-bar"
-             src="https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/scroll_tab/scroll_bar.png" 
-             style="left: 140px; top: 354px;">
-    </div>
+    <img id="scroll-ligament" data-logo="ligament-logo" class="ui-element scroll-bar"
+         src="https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/scroll_tab/scroll_bar.png" 
+         style="left: 140px; top: 248px;">
 
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
-            }
-        }
-    </script>
-    <script type="module" src="main.js"></script>
-</body>
-</html>
+    <img id="scroll-muscle" data-logo="muscle-logo" class="ui-element scroll-bar"
+         src="https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/scroll_tab/scroll_bar.png" 
+         style="left: 140px; top: 354px;">
+</div>
