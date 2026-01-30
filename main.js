@@ -11,35 +11,44 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 document.body.appendChild(renderer.domElement);
 
-// --- Headlamp Lighting ---
-const headlamp = new THREE.PointLight(0xffffff, 20);
-camera.add(headlamp);
-scene.add(camera);
-scene.add(new THREE.AmbientLight(0xffffff, 0.4));
-
-// We use a Group to act as a pivot point
 const modelGroup = new THREE.Group();
 scene.add(modelGroup);
 
+// --- Fixed Global Lighting ---
+// Low-intensity ambient light so the shadows aren't pitch black
+scene.add(new THREE.AmbientLight(0xffffff, 0.4));
+
+let model;
 const loader = new GLTFLoader();
 const modelUrl = 'https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/381a69f58bb395a082d79d4fb746717ae6b64307/anatomy-compressed.glb';
 
 loader.load(modelUrl, (gltf) => {
-    const loadedModel = gltf.scene;
+    model = gltf.scene;
     
-    // 1. Center the model's geometry inside the group
-    const box = new THREE.Box3().setFromObject(loadedModel);
+    // 1. Center the model
+    const box = new THREE.Box3().setFromObject(model);
     const center = box.getCenter(new THREE.Vector3());
-    loadedModel.position.sub(center); 
-    
-    modelGroup.add(loadedModel);
+    const size = box.getSize(new THREE.Vector3());
+    model.position.sub(center); 
+    modelGroup.add(model);
+
+    // 2. Position Light relative to Model Head
+    // We place it slightly above the top of the bounding box
+    const lightAbove = new THREE.PointLight(0xffffff, 15);
+    lightAbove.position.set(0, (size.y / 2) + 0.5, 1); 
+    modelGroup.add(lightAbove); 
+
+    // 3. Add a "Fill Light" that moves with the group 
+    // This ensures the front is always lit even when zooming
+    const fillLight = new THREE.DirectionalLight(0xffffff, 1);
+    fillLight.position.set(0, 0, 2);
+    modelGroup.add(fillLight);
 });
 
 // --- Interaction Logic ---
 let isDragging = false;
 let previousMousePosition = { x: 0, y: 0 };
 
-// Crucial: Update the "previous" position the moment the mouse hits the desk
 window.addEventListener('mousedown', (e) => {
     isDragging = true;
     previousMousePosition = { x: e.clientX, y: e.clientY };
@@ -50,30 +59,23 @@ window.addEventListener('mouseup', () => isDragging = false);
 window.addEventListener('mousemove', (e) => {
     if (!isDragging) return;
 
-    // Calculate how far the mouse moved since the last frame
     const deltaX = e.clientX - previousMousePosition.x;
     const deltaY = e.clientY - previousMousePosition.y;
 
     if (e.shiftKey) {
-        // Panning (Movement)
         modelGroup.position.x += deltaX * 0.005;
         modelGroup.position.y -= deltaY * 0.005;
     } else {
-        // Rotation: Rotate the group, not the raw model
         modelGroup.rotation.y += deltaX * 0.01;
-        
-        // Clamp X rotation to 90 degrees up/down to prevent flipping
         const nextRotationX = modelGroup.rotation.x + deltaY * 0.01;
         if (nextRotationX > -Math.PI / 2 && nextRotationX < Math.PI / 2) {
             modelGroup.rotation.x = nextRotationX;
         }
     }
 
-    // Update the position for the next frame calculation
     previousMousePosition = { x: e.clientX, y: e.clientY };
 });
 
-// Zoom using the Group's Z position
 window.addEventListener('wheel', (e) => {
     modelGroup.position.z -= e.deltaY * 0.002;
 }, { passive: true });
