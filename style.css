@@ -1,16 +1,48 @@
-body { 
-    margin: 0; 
-    background-image: url('https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/background.png');
-    background-size: cover;
-    background-position: center;
-    height: 100vh;
-    overflow: hidden;
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Anatomy Viewer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="ui-container">
+        <div class="frame-1-1">
+            <h1 class="text-15">ANATOMY</h1>
+            
+            <div class="search_bar-18">
+                <div class="search_background-6">
+                    <span class="text-14">Search...</span>
+                </div>
+            </div>
 
-canvas {
-    display: block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    outline: none; /* Removes the blue border on click */
-}
+            <div class="menu-items">
+                <div class="item">
+                    <div class="scroll_bar_muscle-10"></div>
+                    <span class="text-17">Muscular System</span>
+                </div>
+                <div class="item">
+                    <div class="scroll_bar_bone-21"></div>
+                    <span class="text-17">Skeletal System</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="settings_background-8">
+            <div class="text-19">⚙️</div>
+        </div>
+    </div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+    <script type="module" src="main.js"></script>
+</body>
+</html>
