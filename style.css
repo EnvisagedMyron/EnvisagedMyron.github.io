@@ -1,48 +1,75 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Anatomy Viewer</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="ui-container">
-        <div class="frame-1-1">
-            <h1 class="text-15">ANATOMY</h1>
-            
-            <div class="search_bar-18">
-                <div class="search_background-6">
-                    <span class="text-14">Search...</span>
-                </div>
-            </div>
+/* Paste your generated :root and class variables here first */
+:root {
+  --font-family-montserrat: 'Montserrat', sans-serif;
+  --text-rgb-97-117-158: rgba(97, 117, 158, 1);
+  --text-rgb-106-127-170: rgba(106, 127, 170, 1);
+  --text-rgb-128-161-229: rgba(128, 161, 229, 1);
+  --text-rgb-125-163-240: rgba(125, 163, 240, 1);
+  --text-rgb-119-147-206: rgba(119, 147, 206, 1);
+}
 
-            <div class="menu-items">
-                <div class="item">
-                    <div class="scroll_bar_muscle-10"></div>
-                    <span class="text-17">Muscular System</span>
-                </div>
-                <div class="item">
-                    <div class="scroll_bar_bone-21"></div>
-                    <span class="text-17">Skeletal System</span>
-                </div>
-            </div>
-        </div>
+/* Core Setup */
+body { 
+    margin: 0; 
+    background-image: url('https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/background.png');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    overflow: hidden;
+    font-family: var(--font-family-montserrat);
+}
 
-        <div class="settings_background-8">
-            <div class="text-19">⚙️</div>
-        </div>
-    </div>
+canvas {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1; /* Model stays in the back */
+}
 
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
-            }
-        }
-    </script>
-    <script type="module" src="main.js"></script>
-</body>
-</html>
+/* UI Positioning */
+.ui-container {
+    position: relative;
+    z-index: 10; /* UI stays in the front */
+    pointer-events: none; /* Allows mouse to click through to the 3D model */
+    height: 100vh;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Enable clicks for UI elements specifically */
+.frame-1-1, .search_bar-18, .settings_background-8 {
+    pointer-events: auto;
+}
+
+/* Your provided classes */
+.frame-1-1 {
+    background-color: rgba(255, 255, 255, 0.1); /* Adjusted to semi-transparent */
+    backdrop-filter: blur(10px);
+    padding: 20px;
+    border-radius: 20px;
+    width: 300px;
+}
+
+.text-15 {
+    font-size: 40px;
+    font-weight: 700;
+    color: var(--text-rgb-106-127-170);
+    margin-bottom: 20px;
+}
+
+.search_background-6 {
+    background-color: rgba(24, 29, 37, 1);
+    border-radius: 15px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.text-17 {
+    color: var(--text-rgb-128-161-229);
+    font-size: 24px;
+}
+
+/* Add the rest of your provided CSS here... */
