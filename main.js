@@ -26,15 +26,27 @@ const loader = new GLTFLoader();
 const modelUrl = 'https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/381a69f58bb395a082d79d4fb746717ae6b64307/anatomy-compressed.glb';
 
 loader.load(modelUrl, (gltf) => {
-    const model = gltf.scene;
-    
-    // Auto-center the geometry inside the pivot group
-    const box = new THREE.Box3().setFromObject(model);
-    const center = box.getCenter(new THREE.Vector3());
-    model.position.sub(center); 
-    
+    model = gltf.scene;
     modelPivot.add(model);
+
+    // Link UI Sliders to Model Opacity
+    const boneSlider = document.getElementById('bone-slider');
+    boneSlider.addEventListener('input', (e) => {
+        updateLayerOpacity(model, 'bone', e.target.value);
+    });
+
+    // Add similar listeners for muscle and ligament...
 });
+
+function updateLayerOpacity(parent, nameKeyword, value) {
+    parent.traverse((node) => {
+        if (node.isMesh && node.name.toLowerCase().includes(nameKeyword)) {
+            node.material.transparent = true;
+            node.material.opacity = value;
+            node.visible = value > 0;
+        }
+    });
+}
 
 // --- Constants & State ---
 const SENSITIVITY = {
