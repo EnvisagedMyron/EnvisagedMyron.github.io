@@ -5,16 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3D Anatomy</title>
     <style>
-        body { 
-            margin: 0; 
-            padding: 0;
-            /* Force background to stay behind everything */
-            background: url('https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/background.png') no-repeat center center fixed;
-            background-size: cover;
-            height: 100vh;
+        body { margin: 0; background: #000; overflow: hidden; }
+        
+        #bg-image {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100vw;
-            overflow: hidden;
-            background-color: #050505; 
+            height: 100vh;
+            background: url('https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/background.png') no-repeat center center;
+            background-size: cover;
+            z-index: -1;
         }
 
         canvas {
@@ -22,7 +23,8 @@
             position: absolute;
             top: 0;
             left: 0;
-            z-index: 1; /* Model layer */
+            z-index: 1;
+            outline: none;
         }
 
         #ui-layer {
@@ -31,8 +33,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none;
-            z-index: 10; /* UI layer */
+            pointer-events: none; /* Crucial: Let scroll pass through to canvas */
+            z-index: 10;
         }
 
         .filter-group {
@@ -49,11 +51,12 @@
             width: 119px;
             height: 340px;
             z-index: -1;
+            pointer-events: auto; /* Allow interaction with the menu area */
         }
 
         .ui-element {
             position: absolute;
-            pointer-events: auto;
+            pointer-events: auto; /* Allow clicking/dragging sliders */
             transform: translate(-50%, -50%);
         }
 
@@ -62,18 +65,19 @@
     </style>
 </head>
 <body>
+    <div id="bg-image"></div>
     <div id="ui-layer">
         <div class="filter-group">
             <img src="https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/scroll_tab/filter_button_background.png" class="filter-bg">
 
-            <img id="bone-logo" src="https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/scroll_tab/bone_logo.png" class="ui-element logo" style="left: 27px; top: 63px;">
-            <img id="scroll-bone" data-logo="bone-logo" class="ui-element scroll-bar" src="https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/scroll_tab/scroll_bar.png" style="left: 108px; top: 63px;">
+            <img id="bone-logo" src="https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/scroll_tab/bone_logo.png" class="ui-element logo" style="left: 27px; top: 73px;">
+            <img id="scroll-bone" data-logo="bone-logo" class="ui-element scroll-bar" src="https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/scroll_tab/scroll_bar.png" style="left: 108px; top: 73px;">
 
-            <img id="ligament-logo" src="https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/scroll_tab/ligament_logo.png" class="ui-element logo" style="left: 30px; top: 172px;">
-            <img id="scroll-ligament" data-logo="ligament-logo" class="ui-element scroll-bar" src="https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/scroll_tab/scroll_bar.png" style="left: 108px; top: 172px;">
+            <img id="ligament-logo" src="https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/scroll_tab/ligament_logo.png" class="ui-element logo" style="left: 30px; top: 182px;">
+            <img id="scroll-ligament" data-logo="ligament-logo" class="ui-element scroll-bar" src="https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/scroll_tab/scroll_bar.png" style="left: 108px; top: 182px;">
 
-            <img id="muscle-logo" src="https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/scroll_tab/muscle_logo.png" class="ui-element logo" style="left: 33px; top: 284px;">
-            <img id="scroll-muscle" data-logo="muscle-logo" class="ui-element scroll-bar" src="https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/scroll_tab/scroll_bar.png" style="left: 108px; top: 284px;">
+            <img id="muscle-logo" src="https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/scroll_tab/muscle_logo.png" class="ui-element logo" style="left: 33px; top: 294px;">
+            <img id="scroll-muscle" data-logo="muscle-logo" class="ui-element scroll-bar" src="https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/scroll_tab/scroll_bar.png" style="left: 108px; top: 294px;">
         </div>
     </div>
 
