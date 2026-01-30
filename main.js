@@ -9,25 +9,29 @@ const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 renderer.setClearColor(0x000000, 0);
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.0; 
 document.body.appendChild(renderer.domElement);
 
-// --- Wide Top Light Setup ---
-const topLight = new THREE.SpotLight(0xffffff, 40);
-topLight.angle = Math.PI / 3; // Wider angle (approx 60 degrees)
-topLight.penumbra = 0.3;      // Soft edges, but maintains a circular shape
-topLight.decay = 1;           // How fast the light dims with distance
-topLight.distance = 10;       // Max range of the light
-scene.add(topLight);
+// --- The "Sky Light" System ---
 
-// Subtle ambient light so shadows aren't 100% black
-const ambient = new THREE.AmbientLight(0xffffff, 0.5);
-scene.add(ambient);
+// 1. Hemisphere Light: Provides the "Global" sky feel (Top: White, Bottom: Dark Gray)
+const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 1.2);
+scene.add(hemiLight);
+
+// 2. Main Directional Light: Acts like the sun, hitting everything from above
+const sunLight = new THREE.DirectionalLight(0xffffff, 2.0);
+sunLight.position.set(0, 10, 0); // Positioned high above
+scene.add(sunLight);
+
+// 3. Fill Light: Stays in front of the model so the "face" is never in shadow
+const fillLight = new THREE.DirectionalLight(0xffffff, 0.8);
+fillLight.position.set(0, 0, 5); 
+scene.add(fillLight);
 
 const modelGroup = new THREE.Group();
 scene.add(modelGroup);
 
 let model;
-let modelHeight = 0;
 const loader = new GLTFLoader();
 const modelUrl = 'https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/381a69f58bb395a082d79d4fb746717ae6b64307/anatomy-compressed.glb';
 
@@ -35,14 +39,11 @@ loader.load(modelUrl, (gltf) => {
     model = gltf.scene;
     const box = new THREE.Box3().setFromObject(model);
     const center = box.getCenter(new THREE.Vector3());
-    const size = box.getSize(new THREE.Vector3());
-    
-    modelHeight = size.y;
     model.position.sub(center); 
     modelGroup.add(model);
 });
 
-// --- Interaction Logic (Same as before) ---
+// --- Interaction Logic ---
 let isDragging = false;
 let previousMousePosition = { x: 0, y: 0 };
 
@@ -74,20 +75,14 @@ window.addEventListener('wheel', (e) => {
     modelGroup.position.z -= e.deltaY * 0.002;
 }, { passive: true });
 
-// --- Animation Loop ---
 function animate() {
     requestAnimationFrame(animate);
-
-    if (model) {
-        // Move the light higher above the model to broaden the circle's diameter
-        topLight.position.set(
-            modelGroup.position.x, 
-            modelGroup.position.y + modelHeight + 1.5, 
-            modelGroup.position.z
-        );
-        
-        topLight.target = modelGroup;
-    }
+    
+    // Make the lights "follow" the model's X/Z position so it's always under the "sky"
+    // but keep them high up so the light rays stay parallel
+    sunLight.position.x = modelGroup.position.x;
+    sunLight.position.z = modelGroup.position.z;
+    sunLight.target = modelGroup;
 
     renderer.render(scene, camera);
 }
