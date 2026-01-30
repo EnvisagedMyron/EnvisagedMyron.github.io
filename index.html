@@ -5,7 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3D Anatomy</title>
     <style>
-        body { margin: 0; background: #000; overflow: hidden; }
+        body { 
+            margin: 0; 
+            background: #000; 
+            overflow: hidden; 
+        }
         
         #bg-image {
             position: fixed;
@@ -24,7 +28,6 @@
             top: 0;
             left: 0;
             z-index: 1;
-            outline: none;
         }
 
         #ui-layer {
@@ -33,7 +36,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none; /* Crucial: Let scroll pass through to canvas */
+            pointer-events: none; /* Allows scrolling and clicking the model */
             z-index: 10;
         }
 
@@ -43,7 +46,6 @@
             top: 124px;
             width: 119px; 
             height: 340px;
-            pointer-events: none;
         }
 
         .filter-bg {
@@ -51,16 +53,15 @@
             width: 119px;
             height: 340px;
             z-index: -1;
-            pointer-events: auto; /* Allow interaction with the menu area */
         }
 
         .ui-element {
             position: absolute;
-            pointer-events: auto; /* Allow clicking/dragging sliders */
+            pointer-events: auto; /* Re-enables clicking for buttons/sliders */
             transform: translate(-50%, -50%);
         }
 
-        .logo { width: 66px; height: 69px; }
+        .logo { width: 66px; height: 69px; transition: opacity 0.1s; }
         .scroll-bar { width: 21px; height: 89px; cursor: ew-resize; }
     </style>
 </head>
