@@ -1,89 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Anatomy 3D – Shroom</title>
-  <style>
-    body { margin:0; overflow:hidden; background:#0a0a15; }
-    #container { position: absolute; inset:0; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My 3D Website</title>
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+    <style>
+        model-viewer {
+            width: 100%;
+            height: 500px;
+            background-color: #f0f0f0;
+        }
+    </style>
 </head>
 <body>
 
-  <div id="container"></div>
-
-  <script type="module">
-    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.168.0/build/three.module.js';
-    import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.168.0/examples/jsm/controls/OrbitControls.js';
-    import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.168.0/examples/jsm/loaders/GLTFLoader.js';
-
-    const container = document.getElementById('container');
-
-    // Scene + camera + renderer
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x0a0a15);
-
-    const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 100);
-    camera.position.set(0, 1.2, 3.5);
-
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
-    container.appendChild(renderer.domElement);
-
-    // Lights (important for good look)
-    scene.add(new THREE.AmbientLight(0xffffff, 1.2));
-    const dirLight = new THREE.DirectionalLight(0xffffff, 2.5);
-    dirLight.position.set(5, 8, 6);
-    scene.add(dirLight);
-
-    // Controls
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.06;
-    controls.minDistance = 1.2;
-    controls.maxDistance = 8;
-
-    // Load your model
-    const loader = new GLTFLoader();
-    loader.load(
-      'https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/381a69f58bb395a082d79d4fb746717ae6b64307/anatomy-compressed.glb',
-      (gltf) => {
-        const model = gltf.scene;
-        // Optional: center & scale model if needed
-        model.position.y = -1;           // move down a bit
-        // model.scale.set(0.8, 0.8, 0.8); // if too big/small
-        scene.add(model);
-
-        // Optional: auto-rotate slowly
-        function animate() {
-          requestAnimationFrame(animate);
-          model.rotation.y += 0.003;     // gentle spin
-          controls.update();
-          renderer.render(scene, camera);
-        }
-        animate();
-      },
-      (xhr) => console.log((xhr.loaded / xhr.total * 100) + '% loaded'),
-      (err) => console.error('Error loading GLB:', err)
-    );
-
-    // Resize handling
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-
-    // Render loop
-    function render() {
-      requestAnimationFrame(render);
-      controls.update();
-      renderer.render(scene, camera);
-    }
-    render();
-  </script>
+    <h1>Anatomy Model</h1>
+    
+    <model-viewer 
+        src="https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/381a69f58bb395a082d79d4fb746717ae6b64307/anatomy-compressed.glb"
+        alt="A 3D anatomy model"
+        auto-rotate
+        camera-controls
+        ar
+        shadow-intensity="1">
+    </model-viewer>
 
 </body>
 </html>
