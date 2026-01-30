@@ -1,0 +1,16 @@
+body { 
+    margin: 0; 
+    background-image: url('https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/background.png');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+canvas {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    outline: none; /* Removes the blue border on click */
+}
