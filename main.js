@@ -3,7 +3,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.z = 5; // Start a bit further back
+camera.position.z = 3;
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 renderer.setClearColor(0x000000, 0);
@@ -12,69 +12,70 @@ renderer.toneMapping = THREE.ACESFilmicToneMapping;
 document.body.appendChild(renderer.domElement);
 
 // --- Headlamp Lighting ---
-const headlamp = new THREE.PointLight(0xffffff, 50); // Increased intensity for distance
-camera.add(headlamp); 
-scene.add(camera); 
+const headlamp = new THREE.PointLight(0xffffff, 20);
+camera.add(headlamp);
+scene.add(camera);
+scene.add(new THREE.AmbientLight(0xffffff, 0.4));
 
-const fillLight = new THREE.AmbientLight(0xffffff, 0.3);
-scene.add(fillLight);
+// We use a Group to act as a pivot point
+const modelGroup = new THREE.Group();
+scene.add(modelGroup);
 
-let model;
 const loader = new GLTFLoader();
 const modelUrl = 'https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/381a69f58bb395a082d79d4fb746717ae6b64307/anatomy-compressed.glb';
 
 loader.load(modelUrl, (gltf) => {
-    model = gltf.scene;
-    const box = new THREE.Box3().setFromObject(model);
+    const loadedModel = gltf.scene;
+    
+    // 1. Center the model's geometry inside the group
+    const box = new THREE.Box3().setFromObject(loadedModel);
     const center = box.getCenter(new THREE.Vector3());
-    model.position.sub(center); 
-    scene.add(model);
+    loadedModel.position.sub(center); 
+    
+    modelGroup.add(loadedModel);
 });
 
-// --- Interaction State ---
+// --- Interaction Logic ---
 let isDragging = false;
 let previousMousePosition = { x: 0, y: 0 };
 
-// 1. Mouse Down/Up
-window.addEventListener('mousedown', () => isDragging = true);
+// Crucial: Update the "previous" position the moment the mouse hits the desk
+window.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    previousMousePosition = { x: e.clientX, y: e.clientY };
+});
+
 window.addEventListener('mouseup', () => isDragging = false);
 
-// 2. Rotation and Panning
 window.addEventListener('mousemove', (e) => {
-    if (!isDragging || !model) {
-        previousMousePosition = { x: e.offsetX, y: e.offsetY };
-        return;
-    }
+    if (!isDragging) return;
 
-    const deltaMove = {
-        x: e.offsetX - previousMousePosition.x,
-        y: e.offsetY - previousMousePosition.y
-    };
+    // Calculate how far the mouse moved since the last frame
+    const deltaX = e.clientX - previousMousePosition.x;
+    const deltaY = e.clientY - previousMousePosition.y;
 
     if (e.shiftKey) {
-        // Shift + Drag: Move the model (Panning)
-        model.position.x += deltaMove.x * 0.005;
-        model.position.y -= deltaMove.y * 0.005;
+        // Panning (Movement)
+        modelGroup.position.x += deltaX * 0.005;
+        modelGroup.position.y -= deltaY * 0.005;
     } else {
-        // Left Click + Drag: Rotate
-        model.rotation.y += deltaMove.x * 0.01;
+        // Rotation: Rotate the group, not the raw model
+        modelGroup.rotation.y += deltaX * 0.01;
         
-        // Clamp vertical rotation to prevent flipping upside down
-        const newRotationX = model.rotation.x + deltaMove.y * 0.01;
-        if (newRotationX > -Math.PI / 2 && newRotationX < Math.PI / 2) {
-            model.rotation.x = newRotationX;
+        // Clamp X rotation to 90 degrees up/down to prevent flipping
+        const nextRotationX = modelGroup.rotation.x + deltaY * 0.01;
+        if (nextRotationX > -Math.PI / 2 && nextRotationX < Math.PI / 2) {
+            modelGroup.rotation.x = nextRotationX;
         }
     }
 
-    previousMousePosition = { x: e.offsetX, y: e.offsetY };
+    // Update the position for the next frame calculation
+    previousMousePosition = { x: e.clientX, y: e.clientY };
 });
 
-// 3. Zoom (Scroll)
+// Zoom using the Group's Z position
 window.addEventListener('wheel', (e) => {
-    if (!model) return;
-    // Move model closer or further on Z axis
-    // e.deltaY is positive when scrolling down, negative when up
-    model.position.z -= e.deltaY * 0.005;
+    modelGroup.position.z -= e.deltaY * 0.002;
 }, { passive: true });
 
 function animate() {
