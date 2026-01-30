@@ -11,38 +11,33 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 document.body.appendChild(renderer.domElement);
 
+// 1. Create the Top Light (Outside the model group)
+const topLight = new THREE.SpotLight(0xffffff, 20);
+topLight.angle = Math.PI / 4;
+topLight.penumbra = 0.5;
+scene.add(topLight);
+
+// 2. Create a Fill Light (So the bottom isn't pitch black)
+const fillLight = new THREE.DirectionalLight(0xffffff, 1.0);
+scene.add(fillLight);
+
 const modelGroup = new THREE.Group();
 scene.add(modelGroup);
 
-// --- Fixed Global Lighting ---
-// Low-intensity ambient light so the shadows aren't pitch black
-scene.add(new THREE.AmbientLight(0xffffff, 0.4));
-
 let model;
+let modelHeight = 0;
 const loader = new GLTFLoader();
 const modelUrl = 'https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/381a69f58bb395a082d79d4fb746717ae6b64307/anatomy-compressed.glb';
 
 loader.load(modelUrl, (gltf) => {
     model = gltf.scene;
-    
-    // 1. Center the model
     const box = new THREE.Box3().setFromObject(model);
     const center = box.getCenter(new THREE.Vector3());
     const size = box.getSize(new THREE.Vector3());
+    
+    modelHeight = size.y;
     model.position.sub(center); 
     modelGroup.add(model);
-
-    // 2. Position Light relative to Model Head
-    // We place it slightly above the top of the bounding box
-    const lightAbove = new THREE.PointLight(0xffffff, 15);
-    lightAbove.position.set(0, (size.y / 2) + 0.5, 1); 
-    modelGroup.add(lightAbove); 
-
-    // 3. Add a "Fill Light" that moves with the group 
-    // This ensures the front is always lit even when zooming
-    const fillLight = new THREE.DirectionalLight(0xffffff, 1);
-    fillLight.position.set(0, 0, 2);
-    modelGroup.add(fillLight);
 });
 
 // --- Interaction Logic ---
@@ -53,12 +48,10 @@ window.addEventListener('mousedown', (e) => {
     isDragging = true;
     previousMousePosition = { x: e.clientX, y: e.clientY };
 });
-
 window.addEventListener('mouseup', () => isDragging = false);
 
 window.addEventListener('mousemove', (e) => {
     if (!isDragging) return;
-
     const deltaX = e.clientX - previousMousePosition.x;
     const deltaY = e.clientY - previousMousePosition.y;
 
@@ -72,7 +65,6 @@ window.addEventListener('mousemove', (e) => {
             modelGroup.rotation.x = nextRotationX;
         }
     }
-
     previousMousePosition = { x: e.clientX, y: e.clientY };
 });
 
@@ -80,8 +72,29 @@ window.addEventListener('wheel', (e) => {
     modelGroup.position.z -= e.deltaY * 0.002;
 }, { passive: true });
 
+// --- The Animation Loop (Light Follower) ---
 function animate() {
     requestAnimationFrame(animate);
+
+    if (model) {
+        // Position the light exactly above the modelGroup's current position
+        topLight.position.set(
+            modelGroup.position.x, 
+            modelGroup.position.y + (modelHeight / 2) + 1, 
+            modelGroup.position.z
+        );
+        
+        // Make the light shine directly at the center of the model
+        topLight.target = modelGroup;
+
+        // Make the fill light follow the camera's view but stay with the model
+        fillLight.position.set(
+            modelGroup.position.x,
+            modelGroup.position.y,
+            modelGroup.position.z + 2
+        );
+    }
+
     renderer.render(scene, camera);
 }
 
