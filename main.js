@@ -7,17 +7,28 @@ const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerH
 
 // Renderer with alpha enabled to see the CSS background
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-renderer.setClearColor(0x000000, 0); // Second parameter is opacity (0 = transparent)
+renderer.setClearColor(0x000000, 0); 
 renderer.setSize(window.innerWidth, window.innerHeight);
+
+// Enhances color accuracy and brightness
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.2;
+
 document.body.appendChild(renderer.domElement);
 
-// Lighting
-const light = new THREE.DirectionalLight(0xffffff, 1.5);
-light.position.set(2, 2, 5);
-scene.add(light);
-scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+// --- Updated Lighting for Proportional Illumination ---
+// AmbientLight illuminates all surfaces equally
+const ambientLight = new THREE.AmbientLight(0xffffff, 1.0); 
+scene.add(ambientLight);
+
+// HemisphereLight adds a subtle gradient from top to bottom for natural depth
+const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 1.5);
+hemiLight.position.set(0, 20, 0);
+scene.add(hemiLight);
+// -------------------------------------------------------
 
 const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true; // Makes the movement feel smoother
 
 // Load the model
 const loader = new GLTFLoader();
