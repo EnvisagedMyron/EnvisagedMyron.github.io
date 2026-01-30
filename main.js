@@ -5,25 +5,23 @@ const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.z = 3;
 
-// Renderer with transparency fixed
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 renderer.setClearColor(0x000000, 0); 
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
 document.body.appendChild(renderer.domElement);
 
-// --- Lighting Fix ---
-const ambientLight = new THREE.AmbientLight(0xffffff, 1.2); // Boosted intensity
+// --- Lighting Restore ---
+const ambientLight = new THREE.AmbientLight(0xffffff, 1.0); 
 scene.add(ambientLight);
 
-const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
-directionalLight.position.set(5, 5, 5);
-scene.add(directionalLight);
+const sunLight = new THREE.DirectionalLight(0xffffff, 0.8);
+sunLight.position.set(5, 10, 7.5);
+scene.add(sunLight);
 
 const modelGroup = new THREE.Group();
 scene.add(modelGroup);
 
-// Model Loading
 const loader = new GLTFLoader();
 loader.load('https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/381a69f58bb395a082d79d4fb746717ae6b64307/anatomy-compressed.glb', (gltf) => {
     const model = gltf.scene;
@@ -33,7 +31,7 @@ loader.load('https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.git
     modelGroup.add(model);
 });
 
-// UI Logic
+// --- Interaction Logic ---
 let activeSlider = null;
 let isDraggingModel = false;
 let prevMouse = { x: 0, y: 0 };
@@ -78,20 +76,19 @@ window.addEventListener('mousemove', (e) => {
         const deltaY = e.clientY - prevMouse.y;
         
         if (e.shiftKey) {
-            modelGroup.position.x += deltaX * 0.002;
-            modelGroup.position.y -= deltaY * 0.002;
+            modelGroup.position.x += deltaX * 0.005;
+            modelGroup.position.y -= deltaY * 0.005;
         } else {
-            modelGroup.rotation.y += deltaX * 0.008;
-            modelGroup.rotation.x += deltaY * 0.008;
+            modelGroup.rotation.y += deltaX * 0.01;
+            modelGroup.rotation.x += deltaY * 0.01;
         }
         prevMouse = { x: e.clientX, y: e.clientY };
     }
 });
 
-// --- Scroll Zoom Fix ---
+// --- Scroll Zoom Restore ---
 window.addEventListener('wheel', (e) => {
-    // Zoom sensitivity
-    modelGroup.position.z -= e.deltaY * 0.001;
+    modelGroup.position.z -= e.deltaY * 0.002;
 }, { passive: true });
 
 function animate() {
