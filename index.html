@@ -1,26 +1,20 @@
-<div id="ui-container">
-    <div class="filter-panel">
-        <h3 class="panel-title">Layers</h3>
-        
-        <div class="control-item">
-            <img src="https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/scroll_tab/bone_logo.png" class="icon" alt="Bones">
-            <div class="slider-track scroll-bar-bone">
-                <input type="range" min="0" max="1" step="0.01" value="1" class="slider" id="bone-slider">
-            </div>
-        </div>
-
-        <div class="control-item">
-            <img src="https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/scroll_tab/ligament_logo.png" class="icon" alt="Ligaments">
-            <div class="slider-track scroll-bar-ligament">
-                <input type="range" min="0" max="1" step="0.01" value="1" class="slider" id="ligament-slider">
-            </div>
-        </div>
-
-        <div class="control-item">
-            <img src="https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/scroll_tab/muscle_logo.png" class="icon" alt="Muscles">
-            <div class="slider-track scroll-bar-muscle">
-                <input type="range" min="0" max="1" step="0.01" value="1" class="slider" id="muscle-slider">
-            </div>
-        </div>
-    </div>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Anatomy Viewer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+    <script type="module" src="main.js"></script>
+</body>
+</html>
