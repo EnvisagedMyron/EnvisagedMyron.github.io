@@ -26,21 +26,21 @@ const loader = new GLTFLoader();
 const modelUrl = 'https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/381a69f58bb395a082d79d4fb746717ae6b64307/anatomy-compressed.glb';
 
 loader.load(modelUrl, (gltf) => {
-    const model = gltf.scene;
-    
-    // Auto-center the geometry inside the pivot group
-    const box = new THREE.Box3().setFromObject(model);
-    const center = box.getCenter(new THREE.Vector3());
-    model.position.sub(center); 
-    
-    modelPivot.add(model);
+    const model = gltf.scene;
+    
+    // Auto-center the geometry inside the pivot group
+    const box = new THREE.Box3().setFromObject(model);
+    const center = box.getCenter(new THREE.Vector3());
+    model.position.sub(center); 
+    
+    modelPivot.add(model);
 });
 
 // --- Constants & State ---
 const SENSITIVITY = {
-    rotate: 0.007,
-    pan: 0.005,
-    zoom: 0.002
+    rotate: 0.007,
+    pan: 0.005,
+    zoom: 0.002
 };
 
 let isDragging = false;
@@ -48,49 +48,49 @@ let prevMouse = { x: 0, y: 0 };
 
 // --- Input Logic ---
 window.addEventListener('mousedown', (e) => {
-    isDragging = true;
-    prevMouse = { x: e.clientX, y: e.clientY };
+    isDragging = true;
+    prevMouse = { x: e.clientX, y: e.clientY };
 });
 
 window.addEventListener('mouseup', () => isDragging = false);
 
 window.addEventListener('mousemove', (e) => {
-    if (!isDragging) return;
+    if (!isDragging) return;
 
-    const deltaX = e.clientX - prevMouse.x;
-    const deltaY = e.clientY - prevMouse.y;
+    const deltaX = e.clientX - prevMouse.x;
+    const deltaY = e.clientY - prevMouse.y;
 
-    if (e.shiftKey) {
-        // Shift + Drag: Pan (Move the pivot)
-        modelPivot.position.x += deltaX * SENSITIVITY.pan;
-        modelPivot.position.y -= deltaY * SENSITIVITY.pan;
-    } else {
-        // Left Click: Rotate (Rotate the pivot)
-        modelPivot.rotation.y += deltaX * SENSITIVITY.rotate;
-        
-        // Vertical rotation with clamping to prevent flipping
-        const newRotationX = modelPivot.rotation.x + deltaY * SENSITIVITY.rotate;
-        modelPivot.rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, newRotationX));
-    }
+    if (e.shiftKey) {
+        // Shift + Drag: Pan (Move the pivot)
+        modelPivot.position.x += deltaX * SENSITIVITY.pan;
+        modelPivot.position.y -= deltaY * SENSITIVITY.pan;
+    } else {
+        // Left Click: Rotate (Rotate the pivot)
+        modelPivot.rotation.y += deltaX * SENSITIVITY.rotate;
+        
+        // Vertical rotation with clamping to prevent flipping
+        const newRotationX = modelPivot.rotation.x + deltaY * SENSITIVITY.rotate;
+        modelPivot.rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, newRotationX));
+    }
 
-    prevMouse = { x: e.clientX, y: e.clientY };
+    prevMouse = { x: e.clientX, y: e.clientY };
 });
 
 window.addEventListener('wheel', (e) => {
-    // Scroll: Zoom (Move pivot on Z axis)
-    modelPivot.position.z -= e.deltaY * SENSITIVITY.zoom;
+    // Scroll: Zoom (Move pivot on Z axis)
+    modelPivot.position.z -= e.deltaY * SENSITIVITY.zoom;
 }, { passive: true });
 
 // --- Resize & Animation ---
 window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
 function animate() {
-    requestAnimationFrame(animate);
-    renderer.render(scene, camera);
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
 }
 
 animate();
