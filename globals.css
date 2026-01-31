@@ -1,26 +1,25 @@
 /* globals.css */
 
-/* Modern CSS Reset */
 *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
+/* Force both html and body to be exactly the size of the window */
 html, body {
     height: 100%;
     width: 100%;
-    overflow: hidden; /* Prevents scrolling on the 3D viewer */
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* This is the "kill switch" for scrollbars */
+    position: fixed; /* Prevents "bounce" scrolling on mobile devices */
 }
 
 body {
-    line-height: 1.5;
+    background-color: #000;
     -webkit-font-smoothing: antialiased;
-    background-color: #000; /* Fallback color */
-}
-
-/* Remove default focus outlines for mouse users, but keep them for keyboard users */
-:focus:not(:focus-visible) {
-    outline: none;
+    /* This prevents the browser from trying to handle touch gestures 
+       (like swiping to go back) which can interfere with your 3D rotation */
+    touch-action: none; 
 }
