@@ -4,6 +4,8 @@ body {
     background-image: url('https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/background.png');
     background-size: cover;
     background-position: center;
+    margin: 0; /* Added to ensure the frame sits flush against the edges */
+    overflow-x: hidden;
 }
 
 canvas {
@@ -13,4 +15,377 @@ canvas {
     left: 0;
     outline: none;
     z-index: 1; /* Ensures the 3D scene stays in its own layer */
+}
+
+/* Frame Layout & UI Elements */
+
+.frame {
+    background-color: #ffffff;
+    width: 100%;
+    min-width: 1920px;
+    min-height: 1080px;
+    position: relative;
+}
+
+.frame .background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1920px;
+    height: 1080px;
+    background: linear-gradient(
+        167deg,
+        rgba(37, 45, 67, 1) 0%,
+        rgba(20, 24, 36, 1) 100%
+    );
+}
+
+.frame .rectangle {
+    position: absolute;
+    top: 171px;
+    left: 1211px;
+    width: 320px;
+    height: 2px;
+}
+
+.frame .popup-background {
+    position: absolute;
+    top: 116px;
+    left: 1208px;
+    width: 326px;
+    height: 293px;
+}
+
+.frame .filter-background {
+    position: absolute;
+    top: 124px;
+    left: 32px;
+    width: 119px;
+    height: 340px;
+}
+
+.frame .search-background {
+    position: absolute;
+    top: 13px;
+    left: 1565px;
+    width: 327px;
+    height: 355px;
+    background-color: #181d25;
+    border-radius: 15px;
+    border: none;
+}
+
+.frame .search-background::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 3px;
+    border-radius: 15px;
+    background: linear-gradient(
+        180deg,
+        rgba(97, 117, 158, 0.1) 0%,
+        rgba(97, 117, 158, 1) 100%
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.frame .settings-background {
+    position: absolute;
+    top: 483px;
+    left: 58px;
+    width: 73px;
+    height: 71px;
+    background-color: #181d25;
+    border-radius: 15px;
+    border: none;
+}
+
+.frame .settings-background::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 3px;
+    border-radius: 15px;
+    background: linear-gradient(
+        180deg,
+        rgba(97, 117, 158, 0.1) 0%,
+        rgba(112, 134, 183, 1) 100%
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.frame .scroll-bar-ligament {
+    position: absolute;
+    top: 248px;
+    left: 137px;
+    width: 21px;
+    height: 89px;
+    background-color: #282f3ab2;
+    border-radius: 41px;
+    border: none;
+    transform: rotate(180deg);
+}
+
+.frame .scroll-bar-ligament::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 3px;
+    border-radius: 41px;
+    background: linear-gradient(
+        180deg,
+        rgba(97, 117, 158, 1) 0%,
+        rgba(97, 117, 158, 1) 100%
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.frame .scroll-bar-muscle {
+    position: absolute;
+    top: 354px;
+    left: 137px;
+    width: 21px;
+    height: 88px;
+    background-color: #282f3ab2;
+    border-radius: 41px;
+    border: none;
+    transform: rotate(180deg);
+}
+
+.frame .scroll-bar-muscle::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 3px;
+    border-radius: 41px;
+    background: linear-gradient(
+        180deg,
+        rgba(97, 117, 158, 1) 0%,
+        rgba(97, 117, 158, 1) 100%
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.frame .ligament-logo {
+    position: absolute;
+    top: 256px;
+    left: 62px;
+    width: 66px;
+    height: 69px;
+    aspect-ratio: 0.97;
+    object-fit: cover;
+}
+
+.frame .bone-logo {
+    position: absolute;
+    top: 147px;
+    left: 59px;
+    width: 66px;
+    height: 69px;
+    aspect-ratio: 0.97;
+    object-fit: cover;
+}
+
+.frame .muscle-logo {
+    position: absolute;
+    top: 368px;
+    left: 65px;
+    width: 59px;
+    height: 59px;
+    aspect-ratio: 1;
+    object-fit: cover;
+}
+
+.frame .text-guide {
+    position: absolute;
+    top: 1009px;
+    left: 14px;
+    font-family: "Montserrat-SemiBold", Helvetica;
+    font-weight: 600;
+    color: #61759e;
+    font-size: 24px;
+    letter-spacing: -1.92px;
+    line-height: normal;
+}
+
+.frame .text-wrapper {
+    position: absolute;
+    top: 117px;
+    left: 1504px;
+    font-family: "Montserrat-Bold", Helvetica;
+    font-weight: 700;
+    color: #6a7faa;
+    font-size: 40px;
+    letter-spacing: -2.00px;
+    line-height: normal;
+}
+
+.frame .popup-title {
+    position: absolute;
+    top: 127px;
+    left: 1248px;
+    background: linear-gradient(
+        137deg,
+        rgba(135, 169, 237, 1) 0%,
+        rgba(169, 162, 235, 1) 100%
+    );
+    -webkit-background-clip: text !important;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-fill-color: transparent;
+    font-family: "Montserrat-Bold", Helvetica;
+    font-weight: 700;
+    color: transparent;
+    font-size: 30px;
+    letter-spacing: -1.50px;
+    line-height: normal;
+}
+
+.frame .popup-description {
+    position: absolute;
+    top: 173px;
+    left: 1215px;
+    font-family: "Montserrat-Bold", Helvetica;
+    font-weight: 400;
+    color: transparent;
+    font-size: 24px;
+    letter-spacing: -1.92px;
+    line-height: 24px;
+}
+
+.frame .span {
+    font-weight: 700;
+    color: #7fa1e5;
+    letter-spacing: -0.46px;
+}
+
+.frame .text-wrapper-2 {
+    font-weight: 700;
+    color: #7da3f0;
+    letter-spacing: -0.46px;
+}
+
+.frame .text-wrapper-3 {
+    font-family: "Montserrat-SemiBold", Helvetica;
+    font-weight: 600;
+    color: #7693cd;
+    letter-spacing: -0.46px;
+}
+
+.frame .text-wrapper-4 {
+    font-weight: 700;
+    color: #7fa1e5;
+    letter-spacing: -0.46px;
+    line-height: 33.6px;
+}
+
+.frame .text-wrapper-5 {
+    font-weight: 700;
+    color: #7ca2f0;
+    letter-spacing: -0.46px;
+    line-height: 33.6px;
+}
+
+.frame .text-wrapper-6 {
+    font-weight: 700;
+    color: #6a7faa;
+    letter-spacing: -0.46px;
+    line-height: 33.6px;
+}
+
+.frame .search-bar {
+    position: absolute;
+    top: 13px;
+    left: 1565px;
+    width: 323px;
+    height: 71px;
+    background-color: #181d25;
+    border-radius: 15px;
+    border: none;
+}
+
+.frame .search-bar::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 3px;
+    border-radius: 15px;
+    background: linear-gradient(
+        180deg,
+        rgba(97, 117, 158, 0.1) 0%,
+        rgba(112, 134, 183, 1) 100%
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.frame .search-text {
+    position: absolute;
+    top: 24px;
+    left: 1579px;
+    font-family: "Montserrat-Bold", Helvetica;
+    font-weight: 700;
+    color: #7fa1e5;
+    font-size: 40px;
+    letter-spacing: -2.00px;
+    line-height: normal;
+}
+
+.frame .settings-logo {
+    position: absolute;
+    top: 496px;
+    left: 72px;
+    width: 45px;
+    height: 45px;
+    aspect-ratio: 1;
+    object-fit: cover;
+}
+
+.frame .scroll-bar-bone {
+    position: absolute;
+    top: 141px;
+    left: 137px;
+    width: 21px;
+    height: 89px;
+    background-color: #282f3ab2;
+    border-radius: 41px;
+    border: none;
+    transform: rotate(180deg);
+}
+
+.frame .scroll-bar-bone::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 3px;
+    border-radius: 41px;
+    background: linear-gradient(
+        180deg,
+        rgba(97, 117, 158, 1) 0%,
+        rgba(97, 117, 158, 1) 100%
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    z-index: 1;
+    pointer-events: none;
 }
