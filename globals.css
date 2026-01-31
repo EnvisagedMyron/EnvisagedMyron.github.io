@@ -1,26 +1,40 @@
 /* globals.css */
+@import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");
 
-/* Modern CSS Reset */
+/* Modern CSS Reset & Global Box Sizing */
 *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    -webkit-font-smoothing: antialiased;
 }
 
 html, body {
     height: 100%;
     width: 100%;
+    margin: 0px;
     overflow: hidden; /* Prevents scrolling on the 3D viewer */
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 body {
     line-height: 1.5;
-    -webkit-font-smoothing: antialiased;
     background-color: #000; /* Fallback color */
 }
 
-/* Remove default focus outlines for mouse users, but keep them for keyboard users */
+/* Links */
+a {
+    text-decoration: none;
+}
+
+/* Focus States */
+/* Remove default focus outlines for mouse users */
 :focus:not(:focus-visible) {
     outline: none;
+}
+
+/* Specific focus style for accessibility */
+button:focus-visible {
+    outline: 2px solid #4a90e2 !important;
+    outline: -webkit-focus-ring-color auto 5px !important;
 }
