@@ -7,10 +7,11 @@ body {
 }
 
 canvas {
-    display: block;
+    display: block; /* Removes the "inline" gap at the bottom */
+    width: 100vw;
+    height: 100vh;
     position: absolute;
     top: 0;
     left: 0;
     outline: none;
-    z-index: 1; /* Ensures the 3D scene stays in its own layer */
 }
