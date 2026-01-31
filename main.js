@@ -31,66 +31,61 @@ loader.load(modelUrl, (gltf) => {
     modelPivot.add(model);
 });
 
-// --- UI Interaction Logic ---
+// --- Scroll Bar Interaction ---
+let activeUIElement = null;
+
 const setupDraggableBar = (barSelector, logoSelector) => {
     const bar = document.querySelector(barSelector);
     const logo = document.querySelector(logoSelector);
     if (!bar || !logo) return;
 
-    let activeDrag = false;
-    const startX = 137; // Original position from CSS
-    const targetX = 24;  // Your requested end position
+    const startX = 137;
+    const targetX = 24;
     const range = startX - targetX;
 
     bar.addEventListener('mousedown', (e) => {
-        activeDrag = true;
-        e.stopPropagation(); // Prevents rotating the 3D model while sliding
+        activeUIElement = { bar, logo, startX, targetX, range };
+        e.stopPropagation();
     });
-
-    window.addEventListener('mousemove', (e) => {
-        if (!activeDrag) return;
-
-        const frame = document.querySelector('.frame');
-        const rect = frame.getBoundingClientRect();
-        let currentX = e.clientX - rect.left;
-
-        // Constraint movement
-        if (currentX < targetX) currentX = targetX;
-        if (currentX > startX) currentX = startX;
-
-        bar.style.left = `${currentX}px`;
-
-        // Opacity Logic: 100% at 137, 20% at 24
-        const ratio = (currentX - targetX) / range;
-        const opacity = 0.2 + (ratio * 0.8);
-        logo.style.opacity = opacity;
-    });
-
-    window.addEventListener('mouseup', () => activeDrag = false);
 };
+
+window.addEventListener('mousemove', (e) => {
+    if (!activeUIElement) return;
+
+    const frame = document.querySelector('.frame');
+    const rect = frame.getBoundingClientRect();
+    let currentX = e.clientX - rect.left;
+
+    if (currentX < activeUIElement.targetX) currentX = activeUIElement.targetX;
+    if (currentX > activeUIElement.startX) currentX = activeUIElement.startX;
+
+    activeUIElement.bar.style.left = `${currentX}px`;
+
+    const ratio = (currentX - activeUIElement.targetX) / activeUIElement.range;
+    activeUIElement.logo.style.opacity = 0.2 + (ratio * 0.8);
+});
+
+window.addEventListener('mouseup', () => { activeUIElement = null; });
 
 setupDraggableBar('.scroll-bar-bone', '.bone-logo');
 setupDraggableBar('.scroll-bar-ligament', '.ligament-logo');
 setupDraggableBar('.scroll-bar-muscle', '.muscle-logo');
 
-// --- 3D Control Logic ---
+// --- 3D Navigation ---
 const SENSITIVITY = { rotate: 0.007, pan: 0.005, zoom: 0.002 };
 let isDragging3D = false;
 let prevMouse = { x: 0, y: 0 };
 
 window.addEventListener('mousedown', (e) => {
-    // Only drag 3D if we aren't clicking a UI element
-    if (e.target.tagName === 'CANVAS' || e.target === document.body) {
-        isDragging3D = true;
-        prevMouse = { x: e.clientX, y: e.clientY };
-    }
+    // Only rotate if clicking background, not UI
+    if (e.target.closest('.frame') && window.getComputedStyle(e.target).pointerEvents !== 'none') return;
+    
+    isDragging3D = true;
+    prevMouse = { x: e.clientX, y: e.clientY };
 });
-
-window.addEventListener('mouseup', () => isDragging3D = false);
 
 window.addEventListener('mousemove', (e) => {
     if (!isDragging3D) return;
-
     const deltaX = e.clientX - prevMouse.x;
     const deltaY = e.clientY - prevMouse.y;
 
@@ -105,6 +100,7 @@ window.addEventListener('mousemove', (e) => {
     prevMouse = { x: e.clientX, y: e.clientY };
 });
 
+window.addEventListener('mouseup', () => isDragging3D = false);
 window.addEventListener('wheel', (e) => {
     modelPivot.position.z -= e.deltaY * SENSITIVITY.zoom;
 }, { passive: true });
