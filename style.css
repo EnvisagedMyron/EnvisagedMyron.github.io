@@ -1,16 +1,16 @@
-body { 
-    margin: 0; 
-    background-image: url('https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/background.png');
-    background-size: cover;
-    background-position: center;
-    height: 100vh;
-    overflow: hidden;
+/* style.css */
+
+body { 
+    background-image: url('https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/background.png');
+    background-size: cover;
+    background-position: center;
 }
 
 canvas {
-    display: block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    outline: none; /* Removes the blue border on click */
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    outline: none;
+    z-index: 1; /* Ensures the 3D scene stays in its own layer */
 }
