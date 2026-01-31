@@ -1,5 +1,4 @@
 /* style.css */
-
 body { 
     background-image: url('https://raw.githubusercontent.com/EnvisagedMyron/EnvisagedMyron.github.io/main/assets/background.png');
     background-size: cover;
@@ -18,17 +17,25 @@ canvas {
 }
 
 .frame {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     min-width: 1920px;
     min-height: 1080px;
-    position: relative;
-    z-index: 2;
-    pointer-events: none; /* Allows clicking through to the 3D canvas */
+    z-index: 10;
+    pointer-events: none; /* Allow clicks to pass to 3D model */
 }
 
-/* Enable pointer events only for interactive UI elements */
-.frame div, .frame img, .frame p {
+/* Enable interaction for UI parts */
+.frame .scroll-bar-bone, 
+.frame .scroll-bar-ligament, 
+.frame .scroll-bar-muscle,
+.frame .search-bar,
+.frame .settings-background,
+.frame .text-wrapper {
     pointer-events: auto;
+    cursor: pointer;
 }
 
 .frame .background {
@@ -36,61 +43,47 @@ canvas {
     top: 0; left: 0;
     width: 1920px; height: 1080px;
     background: linear-gradient(167deg, rgba(37, 45, 67, 1) 0%, rgba(20, 24, 36, 1) 100%);
-    pointer-events: none; /* Keep background from blocking 3D scene */
     z-index: -1;
 }
 
-/* Scrollbar specific additions */
-.frame .scroll-bar-ligament, 
-.frame .scroll-bar-muscle, 
-.frame .scroll-bar-bone {
-    cursor: grab;
-    user-select: none;
-    z-index: 10;
-}
+/* Positionings */
+.frame .filter-background { position: absolute; top: 124px; left: 32px; width: 119px; height: 340px; }
+.frame .popup-background { position: absolute; top: 116px; left: 1208px; width: 326px; height: 293px; }
+.frame .bone-logo { position: absolute; top: 147px; left: 59px; width: 66px; height: 69px; object-fit: cover; }
+.frame .ligament-logo { position: absolute; top: 256px; left: 62px; width: 66px; height: 69px; object-fit: cover; }
+.frame .muscle-logo { position: absolute; top: 368px; left: 65px; width: 59px; height: 59px; object-fit: cover; }
 
-.frame .scroll-bar-ligament:active, 
-.frame .scroll-bar-muscle:active, 
-.frame .scroll-bar-bone:active {
-    cursor: grabbing;
-}
-
-/* Logo placement and fit */
-.frame .ligament-logo, .frame .bone-logo, .frame .muscle-logo {
+/* Scroll Bars - Start at Left: 137px */
+.frame .scroll-bar-bone, .frame .scroll-bar-ligament, .frame .scroll-bar-muscle {
     position: absolute;
-    object-fit: cover;
-    transition: opacity 0.1s ease;
+    left: 137px;
+    width: 21px;
+    background-color: #282f3ab2;
+    border-radius: 41px;
+    transform: rotate(180deg);
 }
 
-.frame .bone-logo { top: 147px; left: 59px; width: 66px; height: 69px; }
-.frame .ligament-logo { top: 256px; left: 62px; width: 66px; height: 69px; }
-.frame .muscle-logo { top: 368px; left: 65px; width: 59px; height: 59px; }
+.frame .scroll-bar-bone { top: 141px; height: 89px; }
+.frame .scroll-bar-ligament { top: 248px; height: 89px; }
+.frame .scroll-bar-muscle { top: 354px; height: 88px; }
 
-/* Visibility Fixes */
+/* Text Styles */
 .frame .popup-title {
     position: absolute; top: 127px; left: 1248px;
-    background: linear-gradient(137deg, #87a9ed 0%, #a9a2eb 100%);
+    background: linear-gradient(137deg, rgba(135, 169, 237, 1) 0%, rgba(169, 162, 235, 1) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     font-family: "Montserrat-Bold", Helvetica;
-    font-weight: 700;
     font-size: 30px;
 }
 
 .frame .popup-description {
     position: absolute; top: 173px; left: 1215px;
     font-family: "Montserrat-Bold", Helvetica;
-    color: #61759e; /* Changed from transparent */
+    color: #61759e; /* Fixed visibility */
     font-size: 24px;
-    line-height: 24px;
 }
 
-/* Other UI positions remained as provided */
-.frame .rectangle { position: absolute; top: 171px; left: 1211px; width: 320px; height: 2px; }
-.frame .popup-background { position: absolute; top: 116px; left: 1208px; width: 326px; height: 293px; }
-.frame .filter-background { position: absolute; top: 124px; left: 32px; width: 119px; height: 340px; }
-.frame .search-background { position: absolute; top: 13px; left: 1565px; width: 327px; height: 355px; background-color: #181d25; border-radius: 15px; }
 .frame .text-guide { position: absolute; top: 1009px; left: 14px; color: #61759e; font-size: 24px; }
-.frame .scroll-bar-bone { position: absolute; top: 141px; left: 137px; width: 21px; height: 89px; background-color: #282f3ab2; border-radius: 41px; transform: rotate(180deg); }
-.frame .scroll-bar-ligament { position: absolute; top: 248px; left: 137px; width: 21px; height: 89px; background-color: #282f3ab2; border-radius: 41px; transform: rotate(180deg); }
-.frame .scroll-bar-muscle { position: absolute; top: 354px; left: 137px; width: 21px; height: 88px; background-color: #282f3ab2; border-radius: 41px; transform: rotate(180deg); }
+.frame .search-bar { position: absolute; top: 13px; left: 1565px; width: 323px; height: 71px; background-color: #181d25; border-radius: 15px; }
+.frame .search-text { position: absolute; top: 24px; left: 1579px; color: #7fa1e5; font-size: 40px; font-family: "Montserrat-Bold"; }
