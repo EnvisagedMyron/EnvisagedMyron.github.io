@@ -1,25 +1,23 @@
-/* globals.css */
+@import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");
 
-*, *::before, *::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+* {
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
 }
 
-/* Force both html and body to be exactly the size of the window */
 html, body {
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    overflow: hidden; /* This is the "kill switch" for scrollbars */
-    position: fixed; /* Prevents "bounce" scrolling on mobile devices */
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden; /* Prevent any accidental document scrolling */
+  background-color: #141824;
 }
 
-body {
-    background-color: #000;
-    -webkit-font-smoothing: antialiased;
-    /* This prevents the browser from trying to handle touch gestures 
-       (like swiping to go back) which can interfere with your 3D rotation */
-    touch-action: none; 
+button:focus-visible {
+  outline: 2px solid #4a90e2 !important;
+}
+
+a {
+  text-decoration: none;
 }
