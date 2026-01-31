@@ -1,23 +1,26 @@
-@import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");
+/* globals.css */
 
-* {
-  -webkit-font-smoothing: antialiased;
-  box-sizing: border-box;
+/* Modern CSS Reset */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
-  overflow: hidden; /* Prevent any accidental document scrolling */
-  background-color: #141824;
+    height: 100%;
+    width: 100%;
+    overflow: hidden; /* Prevents scrolling on the 3D viewer */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
-button:focus-visible {
-  outline: 2px solid #4a90e2 !important;
+body {
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    background-color: #000; /* Fallback color */
 }
 
-a {
-  text-decoration: none;
+/* Remove default focus outlines for mouse users, but keep them for keyboard users */
+:focus:not(:focus-visible) {
+    outline: none;
 }
