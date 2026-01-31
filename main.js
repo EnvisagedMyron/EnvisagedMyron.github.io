@@ -10,8 +10,7 @@ const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-document.body.appendChild(renderer.domElement);
-
+document.getElementById('ui-container').appendChild(renderer.domElement);
 // --- Lighting ---
 scene.add(new THREE.AmbientLight(0xffffff, 0.5));
 const sunLight = new THREE.DirectionalLight(0xffffff, 1.5);
