@@ -1,28 +1,20 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta charset="utf-8" />
-    <style>
-      /* Paste your globals.css and style.css content here */
-      @import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");
-      
-      * { -webkit-font-smoothing: antialiased; box-sizing: border-box; }
-      html, body { margin: 0px; height: 100%; }
-      
-      .box { width: 119px; height: 340px; }
-      .box .filter-background {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 119px;
-        height: 340px;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="box">
-      <img class="filter-background" src="img/filter-background.svg" />
-    </div>
-  </body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Anatomy Viewer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+    <script type="module" src="main.js"></script>
+</body>
 </html>
